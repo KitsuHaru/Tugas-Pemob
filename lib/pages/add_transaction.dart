@@ -1,0 +1,141 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class TransactionPage extends StatefulWidget {
+  const TransactionPage({super.key});
+
+  @override
+  State<TransactionPage> createState() => _TransactionPageState();
+}
+
+class _TransactionPageState extends State<TransactionPage> {
+  final TextEditingController _taskNameController = TextEditingController();
+  final TextEditingController _taskDetailController = TextEditingController();
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+  String? _selectedCategory;
+  String? _selectedPriority;
+
+  final List<String> _categories = ["Work", "Study", "Exercise"];
+  final List<String> _priorities = ["High", "Medium", "Low"];
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
+
+  void _saveTask() {
+    if (_taskNameController.text.isEmpty || _taskDetailController.text.isEmpty ||
+        _selectedDate == null || _selectedTime == null || _selectedCategory == null || _selectedPriority == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+
+    final newTask = {
+      'title': _taskNameController.text,
+      'details': _taskDetailController.text,
+      'date': DateFormat.yMd().format(_selectedDate!),
+      'time': _selectedTime!.format(context),
+      'category': _selectedCategory!,
+      'priority': _selectedPriority!,
+    };
+
+    Navigator.pop(context, newTask);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Task", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.teal,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _taskNameController,
+              decoration: InputDecoration(labelText: 'Task Name'),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _taskDetailController,
+              decoration: InputDecoration(labelText: 'Task Details'),
+              maxLines: 2,
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_selectedDate == null ? 'No Date Chosen!' : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}'),
+                TextButton(onPressed: () => _selectDate(context), child: Text('Choose Date')),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_selectedTime == null ? 'No Time Chosen!' : 'Picked Time: ${_selectedTime!.format(context)}'),
+                TextButton(onPressed: () => _selectTime(context), child: Text('Choose Time')),
+              ],
+            ),
+            SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              value: _selectedCategory,
+              hint: Text("Select Category"),
+              items: _categories.map((category) {
+                return DropdownMenuItem(value: category, child: Text(category));
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedCategory = value;
+                });
+              },
+              decoration: InputDecoration(labelText: 'Category'),
+            ),
+            SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              value: _selectedPriority,
+              hint: Text("Select Priority"),
+              items: _priorities.map((priority) {
+                return DropdownMenuItem(value: priority, child: Text(priority));
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedPriority = value;
+                });
+              },
+              decoration: InputDecoration(labelText: 'Priority'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(onPressed: _saveTask, child: Text('Add Task')),
+          ],
+        ),
+      ),
+    );
+  }
+}
