@@ -86,7 +86,8 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               const SizedBox(height: 4),
                               Text("📌 Details: ${task['details'] ?? "-"}"),
-                              Text("📅 Date: ${task['date'] ?? "-"} at ${task['time'] ?? "-"}"),
+                              Text(
+                                  "📅 Date: ${task['date'] ?? "-"} at ${task['time'] ?? "-"}"),
                               Text("📂 Category: ${task['category'] ?? "-"}"),
                               Text("⚡ Priority: ${task['priority'] ?? "-"}"),
                             ],
@@ -121,11 +122,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showEditDialog(BuildContext context, int index, Map<String, String> task) {
+  void _showEditDialog(
+      BuildContext context, int index, Map<String, String> task) {
     final titleController = TextEditingController(text: task['title']);
     final detailsController = TextEditingController(text: task['details']);
 
-    DateTime selectedDate = DateTime.tryParse(task['date'] ?? "") ?? DateTime.now();
+    DateTime selectedDate =
+        DateTime.tryParse(task['date'] ?? "") ?? DateTime.now();
     List<String> timeParts = (task['time'] ?? "00:00").split(":");
     TimeOfDay selectedTime = TimeOfDay(
       hour: int.tryParse(timeParts[0]) ?? 0,
@@ -146,8 +149,13 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(controller: titleController, decoration: const InputDecoration(labelText: "Title")),
-                    TextField(controller: detailsController, decoration: const InputDecoration(labelText: "Details")),
+                    TextField(
+                        controller: titleController,
+                        decoration: const InputDecoration(labelText: "Title")),
+                    TextField(
+                        controller: detailsController,
+                        decoration:
+                            const InputDecoration(labelText: "Details")),
                     ElevatedButton(
                       onPressed: () async {
                         DateTime? picked = await showDatePicker(
@@ -160,7 +168,8 @@ class _HomePageState extends State<HomePage> {
                           setState(() => selectedDate = picked);
                         }
                       },
-                      child: Text("Pick Date: ${selectedDate.toLocal()}".split(' ')[0]),
+                      child: Text(
+                          "Pick Date: ${selectedDate.toLocal()}".split(' ')[0]),
                     ),
                     ElevatedButton(
                       onPressed: () async {

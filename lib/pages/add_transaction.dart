@@ -46,10 +46,14 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   void _saveTask() {
-    if (_taskNameController.text.isEmpty || _taskDetailController.text.isEmpty ||
-        _selectedDate == null || _selectedTime == null || _selectedCategory == null || _selectedPriority == null) {
+    if (_taskNameController.text.isEmpty ||
+        _taskDetailController.text.isEmpty ||
+        _selectedDate == null ||
+        _selectedTime == null ||
+        _selectedCategory == null ||
+        _selectedPriority == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please fill in all fields")),
+        const SnackBar(content: Text("Please fill in all fields")),
       );
       return;
     }
@@ -63,6 +67,9 @@ class _TransactionPageState extends State<TransactionPage> {
       'priority': _selectedPriority!,
     };
 
+    // Simulasi simpan ke Firebase / database
+    debugPrint("[DUMMY FIRESTORE] Task saved: $newTask");
+
     Navigator.pop(context, newTask);
   }
 
@@ -70,9 +77,9 @@ class _TransactionPageState extends State<TransactionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Task", style: TextStyle(color: Colors.white)),
+        title: const Text("Add Task", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.teal,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -80,33 +87,41 @@ class _TransactionPageState extends State<TransactionPage> {
           children: [
             TextField(
               controller: _taskNameController,
-              decoration: InputDecoration(labelText: 'Task Name'),
+              decoration: const InputDecoration(labelText: 'Task Name'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _taskDetailController,
-              decoration: InputDecoration(labelText: 'Task Details'),
+              decoration: const InputDecoration(labelText: 'Task Details'),
               maxLines: 2,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(_selectedDate == null ? 'No Date Chosen!' : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}'),
-                TextButton(onPressed: () => _selectDate(context), child: Text('Choose Date')),
+                Text(_selectedDate == null
+                    ? 'No Date Chosen!'
+                    : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}'),
+                TextButton(
+                    onPressed: () => _selectDate(context),
+                    child: const Text('Choose Date')),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(_selectedTime == null ? 'No Time Chosen!' : 'Picked Time: ${_selectedTime!.format(context)}'),
-                TextButton(onPressed: () => _selectTime(context), child: Text('Choose Time')),
+                Text(_selectedTime == null
+                    ? 'No Time Chosen!'
+                    : 'Picked Time: ${_selectedTime!.format(context)}'),
+                TextButton(
+                    onPressed: () => _selectTime(context),
+                    child: const Text('Choose Time')),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             DropdownButtonFormField<String>(
               value: _selectedCategory,
-              hint: Text("Select Category"),
+              hint: const Text("Select Category"),
               items: _categories.map((category) {
                 return DropdownMenuItem(value: category, child: Text(category));
               }).toList(),
@@ -115,12 +130,12 @@ class _TransactionPageState extends State<TransactionPage> {
                   _selectedCategory = value;
                 });
               },
-              decoration: InputDecoration(labelText: 'Category'),
+              decoration: const InputDecoration(labelText: 'Category'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             DropdownButtonFormField<String>(
               value: _selectedPriority,
-              hint: Text("Select Priority"),
+              hint: const Text("Select Priority"),
               items: _priorities.map((priority) {
                 return DropdownMenuItem(value: priority, child: Text(priority));
               }).toList(),
@@ -129,10 +144,10 @@ class _TransactionPageState extends State<TransactionPage> {
                   _selectedPriority = value;
                 });
               },
-              decoration: InputDecoration(labelText: 'Priority'),
+              decoration: const InputDecoration(labelText: 'Priority'),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: _saveTask, child: Text('Add Task')),
+            const SizedBox(height: 20),
+            ElevatedButton(onPressed: _saveTask, child: const Text('Add Task')),
           ],
         ),
       ),

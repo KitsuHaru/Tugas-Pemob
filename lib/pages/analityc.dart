@@ -9,23 +9,21 @@ class AnalitycPage extends StatefulWidget {
 }
 
 class _AnalitycPageState extends State<AnalitycPage> {
-
-
   final List<PieChartSectionData> pieChartData = [
     PieChartSectionData(
-      value: 40, // Percentage for Work
+      value: 40,
       title: 'Work',
       color: Colors.blue,
       radius: 60,
     ),
     PieChartSectionData(
-      value: 35, // Percentage for Study
+      value: 35,
       title: 'Study',
       color: Colors.green,
       radius: 60,
     ),
     PieChartSectionData(
-      value: 25, // Percentage for Exercise
+      value: 25,
       title: 'Exercise',
       color: Colors.orange,
       radius: 60,
@@ -40,12 +38,13 @@ class _AnalitycPageState extends State<AnalitycPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activity Breakdown', style: TextStyle(color: Colors.white)),
-         backgroundColor: Colors.teal,
-         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Ikon panah kembali
+        title: const Text('Activity Breakdown',
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.teal,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke halaman sebelumnya
+            Navigator.pop(context);
           },
         ),
       ),
@@ -55,14 +54,14 @@ class _AnalitycPageState extends State<AnalitycPage> {
             sections: pieChartData.map((data) {
               final isTouched = pieChartData.indexOf(data) == touchedIndex;
               final opacity = isTouched ? 1.0 : 0.6;
-              final percentage = (data.value / totalValue * 100).toStringAsFixed(1); // Calculate percentage
+              final percentage =
+                  (data.value / totalValue * 100).toStringAsFixed(1);
               return PieChartSectionData(
                 value: data.value,
-                title: isTouched ? '${data.title}\n$percentage%' : data.title, // Show percentage when touched
-                // ignore: deprecated_member_use
+                title: isTouched ? '${data.title}\n$percentage%' : data.title,
                 color: data.color.withOpacity(opacity),
                 radius: isTouched ? 70 : 60,
-                titleStyle: TextStyle(
+                titleStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -77,7 +76,8 @@ class _AnalitycPageState extends State<AnalitycPage> {
                   if (pieTouchResponse != null &&
                       pieTouchResponse.touchedSection is! FlPointerExitEvent &&
                       pieTouchResponse.touchedSection is! PointerUpEvent) {
-                    touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    touchedIndex =
+                        pieTouchResponse.touchedSection!.touchedSectionIndex;
                   } else {
                     touchedIndex = null;
                   }
